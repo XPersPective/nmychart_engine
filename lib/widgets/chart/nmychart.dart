@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../models/chart_data.dart';
-import '../controllers/chart_controller.dart';
-import '../utils/extensions.dart';
+import '../../models/models.dart';
+import '../../controllers/chart_controller.dart';
+import '../../utils/extensions.dart';
 
 class NMychart extends StatefulWidget {
   final ChartData data;
@@ -151,7 +151,7 @@ class _NMychartPainter extends CustomPainter {
     int dataOffset,
   ) {
     final field = _getField(plot.fieldIndex);
-    final timeField = controller.data.timeField;
+    final timeField = controller.data.getTimeField();
     if (field == null || timeField == null) return;
 
     switch (plot.type) {
@@ -166,16 +166,13 @@ class _NMychartPainter extends CustomPainter {
 
   dynamic _getField(dynamic fieldIndex) {
     if (fieldIndex is int) {
-      return controller.data.fields.firstWhereOrNull(
-        (f) => f.index == fieldIndex,
-      );
-    } else if (fieldIndex is String) {
-      // Önce int olarak deneme
-      final asInt = int.tryParse(fieldIndex);
-      if (asInt != null) {
-        return controller.data.fields.firstWhereOrNull((f) => f.index == asInt);
+      // Find field by position in array
+      if (fieldIndex >= 0 && fieldIndex < controller.data.fields.length) {
+        return controller.data.fields[fieldIndex];
       }
-      // Sonra key olarak ara
+      return null;
+    } else if (fieldIndex is String) {
+      // Find field by key
       return controller.data.fields.firstWhereOrNull(
         (f) => f.key == fieldIndex,
       );

@@ -1,53 +1,116 @@
+import 'plots/plots.dart';
 import 'chart_field.dart';
-import 'chart_plot.dart';
-import '../utils/extensions.dart';
+import 'chart_metadata.dart';
+import 'chart_data_source.dart';
+import 'chart_input.dart';
+import 'chart_notation.dart';
+import 'chart_guide.dart';
 
-/// Ana grafik veri modeli - JSON'dan parse edilecek
+/// Chart Data Model
+/// Container for chart configuration and data
 class ChartData {
-  final String id;
-  final String name;
-  final String shortName;
-  final String description;
-  final String category;
-  final String author;
-  final String version;
-  final List<ChartField> fields;
+  final List<Plot> plots;
   final List<List<dynamic>> data;
-  final List<ChartPlot> plots;
+  final ChartMetadata metadata;
+  final ChartDataSource dataSource;
+  final List<ChartField> fields;
+  final List<ChartInput> inputs;
+  final List<ChartNotation> notations;
+  final List<ChartGuide> guides;
 
   ChartData({
-    required this.id,
-    required this.name,
-    required this.shortName,
-    required this.description,
-    required this.category,
-    required this.author,
-    required this.version,
-    required this.fields,
-    required this.data,
     required this.plots,
+    required this.data,
+    required this.metadata,
+    required this.dataSource,
+    this.fields = const [],
+    this.inputs = const [],
+    this.notations = const [],
+    this.guides = const [],
   });
 
+  /// Create ChartData from JSON
   factory ChartData.fromJson(Map<String, dynamic> json) {
+    final plotsJson =
+        (json['plots'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final plots = plotsJson.map((p) => Plot.fromJson(p)).toList();
+
+    final dataJson = (json['data'] as List?)?.cast<List<dynamic>>() ?? [];
+
+    final fieldsJson =
+        (json['fields'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final fields = fieldsJson.map((f) => ChartField.fromJson(f)).toList();
+
+    final metadataJson = json['metadata'] as Map<String, dynamic>? ?? {};
+    final metadata = ChartMetadata.fromJson(metadataJson);
+
+    final dataSourceJson = json['dataSource'] as Map<String, dynamic>? ?? {};
+    final dataSource = ChartDataSource.fromJson(dataSourceJson);
+
+    final inputsJson =
+        (json['inputs'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final inputs = inputsJson.map((i) => ChartInput.fromJson(i)).toList();
+
+    final notationsJson =
+        (json['notations'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final notations = notationsJson
+        .map((n) => ChartNotation.fromJson(n))
+        .toList();
+
+    final guidesJson =
+        (json['guides'] as List?)?.cast<Map<String, dynamic>>() ?? [];
+    final guides = guidesJson.map((g) => ChartGuide.fromJson(g)).toList();
+
     return ChartData(
-      id: json['id'] ?? 'unknown',
-      name: json['name'] ?? '',
-      shortName: json['short_name'] ?? '',
-      description: json['description'] ?? '',
-      category: json['category'] ?? '',
-      author: json['author'] ?? '',
-      version: json['version'] ?? '1.0.0',
-      fields: (json['fields'] as List? ?? [])
-          .map((e) => ChartField.fromJson(e))
-          .toList(),
-      data: (json['data'] as List? ?? []).cast<List<dynamic>>(),
-      plots: (json['plots'] as List? ?? [])
-          .map((e) => ChartPlot.fromJson(e))
-          .toList(),
+      plots: plots,
+      data: dataJson,
+      metadata: metadata,
+      dataSource: dataSource,
+      fields: fields,
+      inputs: inputs,
+      notations: notations,
+      guides: guides,
     );
   }
 
-  /// Zaman alanını bul
-  ChartField? get timeField =>
-      fields.firstWhereOrNull((f) => f.type == ChartFieldType.time);
+  /// Convert to JSON
+  Map<String, dynamic> toJson() => {
+    'plots': plots.map((p) => p.toJson()).toList(),
+    'data': data,
+    'metadata': metadata.toJson(),
+    'dataSource': dataSource.toJson(),
+    'fields': fields.map((f) => f.toJson()).toList(),
+    'inputs': inputs.map((i) => i.toJson()).toList(),
+    'notations': notations.map((n) => n.toJson()).toList(),
+    'guides': guides.map((g) => g.toJson()).toList(),
+  };
+
+  /// Get plot by index
+  Plot? getPlot(int index) =>
+      index >= 0 && index < plots.length ? plots[index] : null;
+
+  /// Get time field from fields list
+  ChartField? getTimeField() {
+    try {
+      return fields.firstWhere(
+        (f) =>
+            f.axis.toLowerCase() == 'time' ||
+            f.valueType.toString().contains('date') == true ||
+            f.key.toLowerCase().contains('date') == true ||
+            f.key.toLowerCase().contains('time') == true,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Add plot
+  void addPlot(Plot plot) => plots.add(plot);
+
+  /// Remove plot
+  void removePlot(int index) {
+    if (index >= 0 && index < plots.length) {
+      plots.removeAt(index);
+    }
+  }
 }
