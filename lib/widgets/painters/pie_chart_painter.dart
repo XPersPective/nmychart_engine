@@ -17,9 +17,6 @@ class PieChartPainter extends ChartPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Call plot's render method to handle conditions and plot-specific logic
-    plot.render(canvas, size);
-
     if (values.isEmpty) return;
 
     final total = values.reduce((a, b) => a + b);

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../enums/enums.dart';
 import 'plot_condition.dart';
 import 'line_plot.dart';
@@ -25,14 +24,6 @@ abstract class Plot {
   /// Uses factory pattern to instantiate type-specific delegate
   PlotRenderDelegate createDelegate() {
     return PlotRenderDelegateFactory.createDelegate(this);
-  }
-
-  /// Render the plot on canvas
-  /// Delegates to type-specific implementation
-  void render(Canvas canvas, Size size) {
-    // Note: Actual rendering is now handled by PlotRenderDelegate pattern
-    // See PlotRenderDelegate.paint() for type-specific rendering implementations
-    // This method is kept for backwards compatibility
   }
 
   /// Serialize to JSON

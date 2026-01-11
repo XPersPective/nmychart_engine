@@ -15,9 +15,6 @@ class AreaChartPainter extends ChartPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Call plot's render method to handle conditions and plot-specific logic
-    plot.render(canvas, size);
-
     // Draw grid and axes
     drawGrid(canvas);
     drawAxes(canvas);

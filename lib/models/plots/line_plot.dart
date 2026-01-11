@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../enums/enums.dart';
 import 'plot_condition.dart';
 import 'base_plot.dart';
@@ -17,23 +16,6 @@ class LinePlot extends Plot {
 
   @override
   PlotType get plotType => PlotType.line;
-
-  @override
-  void render(Canvas canvas, Size size) {
-    // This method will be called by the painter to render the plot
-    // Actual rendering logic should be in the painter, but this validates
-    // the plot configuration and handles conditions
-    if (conditions != null && conditions!.isNotEmpty) {
-      // Apply conditions before rendering (filtering, styling, etc)
-      _applyConditions(canvas);
-    }
-  }
-
-  /// Apply plot conditions (affects rendering style, colors, etc)
-  void _applyConditions(Canvas canvas) {
-    // TODO: Implement condition logic
-    // e.g., change color based on condition, apply filters, etc
-  }
 
   @override
   Map<String, dynamic> toJson() => {

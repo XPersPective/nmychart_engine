@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../enums/enums.dart';
 import 'plot_condition.dart';
 import 'base_plot.dart';
@@ -17,17 +16,6 @@ class BarPlot extends Plot {
 
   @override
   PlotType get plotType => PlotType.bar;
-
-  @override
-  void render(Canvas canvas, Size size) {
-    if (conditions != null && conditions!.isNotEmpty) {
-      _applyConditions(canvas);
-    }
-  }
-
-  void _applyConditions(Canvas canvas) {
-    // TODO: Implement condition logic for bar plot
-  }
 
   @override
   Map<String, dynamic> toJson() => {

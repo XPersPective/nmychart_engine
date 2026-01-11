@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import '../enums/enums.dart';
 import 'plot_condition.dart';
 import 'base_plot.dart';
@@ -25,17 +24,6 @@ class CandlestickPlot extends Plot {
 
   @override
   PlotType get plotType => PlotType.candlestick;
-
-  @override
-  void render(Canvas canvas, Size size) {
-    if (conditions != null && conditions!.isNotEmpty) {
-      _applyConditions(canvas);
-    }
-  }
-
-  void _applyConditions(Canvas canvas) {
-    // TODO: Implement condition logic for candlestick plot
-  }
 
   @override
   Map<String, dynamic> toJson() => {
