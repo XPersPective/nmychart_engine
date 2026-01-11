@@ -18,6 +18,24 @@ extension PlotTypeExt on PlotType {
     }
   }
 
+  /// Whether this plot type is rendered as main chart (shows grid)
+  bool get isMainChart {
+    return this == PlotType.line ||
+        this == PlotType.bar ||
+        this == PlotType.area ||
+        this == PlotType.candlestick;
+  }
+
+  /// Whether this plot type is rendered as panel (shows grid)
+  bool get isPanel {
+    return this == PlotType.histogram;
+  }
+
+  /// Whether this plot type is rendered as overlay (hides grid)
+  bool get isOverlay {
+    return false; // Overlays are determined at chart level, not plot level
+  }
+
   static PlotType fromString(String value) {
     switch (value.toLowerCase()) {
       case 'line':

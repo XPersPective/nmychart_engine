@@ -113,21 +113,38 @@ class _MyAppState extends State<MyApp> {
 
   static ChartData _lineStockPrice() {
     return ChartData.fromJson({
-      'metadata': {
-        'id': 'line-stock-price',
-        'name': 'Apple Stock Price',
-        'description': 'Apple AAPL stock price trend',
-        'version': '1.0.0',
-        'createdAt': DateTime.now().toIso8601String(),
-        'updatedAt': DateTime.now().toIso8601String(),
+      "metadata": {
+        "id": "sma_v1_0_0",
+        "name": "Simple Moving Average",
+        "shortName": "SMA",
+        "description": "SMA Indicator",
+        "version": "1.0.0",
+        "createdAt": "2026-01-11T10:00:00Z",
+        "updatedAt": "2026-01-11T10:00:00Z",
+        "type": "financial",
+        "sourceType": "indicator",
       },
-      'dataSource': {
-        'type': 'financial',
-        'pair': 'AAPL/USD',
-        'exchange': 'NYSE',
-        'interval': '1d',
-        'dateFormat': 'YYYY-MM-DD',
-      },
+
+      "inputs": [
+        {
+          'name': 'Period',
+          'key': 'period',
+          'valueType': 'integer',
+          "value": 14,
+          'min': 2,
+          'max': 100,
+          'showInLegendType': "onlyValue",
+        },
+        {
+          'name': 'Smoothing',
+          'key': 'smoothing',
+          'valueType': 'double',
+          "value": 0.5,
+          'min': 0.0,
+          'max': 1.0,
+          'showInLegendType': "nameAndValue",
+        },
+      ],
       'plots': [
         {
           'plotType': 'line',
@@ -142,17 +159,17 @@ class _MyAppState extends State<MyApp> {
           'key': 'date',
           'valueType': 'string',
           'axis': 'x',
-          'showInLegend': false,
+          'showInLegendType': "OnlyValue",
         },
         {
-          'name': 'Price USD',
-          'key': 'price',
+          'name': 'Sma',
+          'key': 'sma',
           'valueType': 'double',
           'axis': 'y',
-          'showInLegend': true,
+          'showInLegendType': "NameAndValue",
         },
       ],
-      'inputs': [],
+
       'notations': [],
       'guides': [],
       'data': [

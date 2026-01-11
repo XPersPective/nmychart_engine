@@ -1,74 +1,181 @@
 import 'enums/enums.dart';
 
-/// Chart Field Model
-/// Defines data field properties and types
-class ChartField {
+/// Base Chart Field Model
+/// Abstract class for all field types
+abstract class ChartField {
   final String name;
   final String key;
-  final ValueType valueType;
   final String axis;
-  final bool showInLegend;
-  final String? format;
+  final ShowInLegendType showInLegendType;
 
   ChartField({
     required this.name,
     required this.key,
-    required this.valueType,
     required this.axis,
-    this.showInLegend = true,
-    this.format,
-  }) : assert(
-         valueType != ValueType.timestamp || format != null,
-         'format is required when valueType is timestamp',
-       );
+    this.showInLegendType = ShowInLegendType.nameAndValue,
+  });
 
-  /// Create from JSON
-  factory ChartField.fromJson(Map<String, dynamic> json) => ChartField(
-    name: json['name'] as String,
-    key: json['key'] as String,
-    valueType: _parseValueType(json['valueType'] as String),
-    axis: json['axis'] as String,
-    showInLegend: json['showInLegend'] as bool? ?? true,
-    format: json['format'] as String?,
-  );
+  /// Get the value type for this field
+  ValueType get valueType;
+
+  /// Factory constructor for polymorphic JSON deserialization
+  static ChartField fromJson(Map<String, dynamic> json) {
+    final valueTypeStr = json['valueType'] as String;
+    final name = json['name'] as String;
+    final key = json['key'] as String;
+    final axis = json['axis'] as String;
+    final showInLegendType = _parseShowInLegendType(
+      json['showInLegendType'] as String,
+    );
+
+    switch (valueTypeStr.toLowerCase()) {
+      case 'integer':
+        return IntegerField(
+          name: name,
+          key: key,
+          axis: axis,
+          showInLegendType: showInLegendType,
+        );
+      case 'double':
+        return DoubleField(
+          name: name,
+          key: key,
+          axis: axis,
+          showInLegendType: showInLegendType,
+        );
+      case 'string':
+        return StringField(
+          name: name,
+          key: key,
+          axis: axis,
+          showInLegendType: showInLegendType,
+        );
+      case 'timestamp':
+        return TimestampField(
+          name: name,
+          key: key,
+          axis: axis,
+          showInLegendType: showInLegendType,
+          format: json['format'] as String,
+        );
+      default:
+        return StringField(
+          name: name,
+          key: key,
+          axis: axis,
+          showInLegendType: showInLegendType,
+        );
+    }
+  }
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
     'name': name,
     'key': key,
-    'valueType': _valueTypeToString(valueType),
+    'valueType': valueType.toString().split('.').last,
     'axis': axis,
-    'showInLegend': showInLegend,
-    if (format != null) 'format': format,
+    'showInLegendType': _showInLegendTypeToString(showInLegendType),
   };
 
-  static ValueType _parseValueType(String typeStr) {
+  static ShowInLegendType _parseShowInLegendType(String typeStr) {
     switch (typeStr.toLowerCase()) {
-      case 'integer':
-        return ValueType.integer;
-      case 'double':
-        return ValueType.double;
-      case 'string':
-        return ValueType.string;
-
-      case 'timestamp':
-        return ValueType.timestamp;
+      case 'hidden':
+        return ShowInLegendType.hidden;
+      case 'onlyvalue':
+        return ShowInLegendType.onlyValue;
+      case 'nameandvalue':
+        return ShowInLegendType.nameAndValue;
       default:
-        return ValueType.string;
+        return ShowInLegendType.nameAndValue;
     }
   }
 
-  static String _valueTypeToString(ValueType type) {
+  static String _showInLegendTypeToString(ShowInLegendType type) {
     switch (type) {
-      case ValueType.integer:
-        return 'integer';
-      case ValueType.double:
-        return 'double';
-      case ValueType.string:
-        return 'string';
-
-      case ValueType.timestamp:
-        return 'timestamp';
+      case ShowInLegendType.hidden:
+        return 'hidden';
+      case ShowInLegendType.onlyValue:
+        return 'onlyValue';
+      case ShowInLegendType.nameAndValue:
+        return 'nameAndValue';
     }
   }
+}
+
+/// Integer Field
+class IntegerField extends ChartField {
+  IntegerField({
+    required String name,
+    required String key,
+    required String axis,
+    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
+  }) : super(
+         name: name,
+         key: key,
+         axis: axis,
+         showInLegendType: showInLegendType,
+       );
+
+  @override
+  ValueType get valueType => ValueType.integer;
+}
+
+/// Double Field
+class DoubleField extends ChartField {
+  DoubleField({
+    required String name,
+    required String key,
+    required String axis,
+    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
+  }) : super(
+         name: name,
+         key: key,
+         axis: axis,
+         showInLegendType: showInLegendType,
+       );
+
+  @override
+  ValueType get valueType => ValueType.double;
+}
+
+/// String Field
+class StringField extends ChartField {
+  StringField({
+    required String name,
+    required String key,
+    required String axis,
+    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
+  }) : super(
+         name: name,
+         key: key,
+         axis: axis,
+         showInLegendType: showInLegendType,
+       );
+
+  @override
+  ValueType get valueType => ValueType.string;
+}
+
+/// Timestamp Field (requires format)
+class TimestampField extends ChartField {
+  final String format;
+
+  TimestampField({
+    required String name,
+    required String key,
+    required String axis,
+    required this.format,
+    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
+  }) : super(
+         name: name,
+         key: key,
+         axis: axis,
+         showInLegendType: showInLegendType,
+       );
+
+  @override
+  ValueType get valueType => ValueType.timestamp;
+
+  @override
+  Map<String, dynamic> toJson() => {...super.toJson(), 'format': format};
 }

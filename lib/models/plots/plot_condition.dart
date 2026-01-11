@@ -3,12 +3,14 @@ import '../enums/enums.dart';
 /// Plot Condition Model
 /// Defines conditional styling/behavior for plots
 class PlotCondition {
+  final String? name;
   final Map<String, dynamic> value1;
   final ConditionOperator operator;
   final Map<String, dynamic> value2;
   final Map<String, dynamic> result;
 
   PlotCondition({
+    this.name,
     required this.value1,
     required this.operator,
     required this.value2,
@@ -17,6 +19,7 @@ class PlotCondition {
 
   factory PlotCondition.fromJson(Map<String, dynamic> json) {
     return PlotCondition(
+      name: json['name'] as String?,
       value1: json['value1'] as Map<String, dynamic>? ?? {},
       operator: _parseOperator(json['operator'] as String? ?? ''),
       value2: json['value2'] as Map<String, dynamic>? ?? {},

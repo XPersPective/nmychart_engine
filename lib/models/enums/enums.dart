@@ -7,3 +7,4 @@ export 'direction.dart';
 export 'guide_type.dart';
 export 'axis_type.dart';
 export 'stroke_style.dart';
+export 'show_in_legend_type.dart';

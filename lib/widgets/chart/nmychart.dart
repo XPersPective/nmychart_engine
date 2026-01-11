@@ -2,7 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
 import '../../controllers/chart_controller.dart';
-import '../../utils/extensions.dart';
+import '../painters/delegates/plot_render_delegate_factory.dart';
+import '../painters/delegates/plot_render_delegate.dart';
 
 class NMychart extends StatefulWidget {
   final ChartData data;
@@ -140,182 +141,29 @@ class _NMychartPainter extends CustomPainter {
     final visibleData = this.controller.data.data.sublist(start, end);
 
     for (final plot in this.controller.data.plots) {
-      _drawPlot(canvas, plot, visibleData, start);
-    }
-  }
+      // Use delegate pattern for rendering
+      final delegate = PlotRenderDelegateFactory.createDelegate(plot);
 
-  void _drawPlot(
-    Canvas canvas,
-    dynamic plot,
-    List<List<dynamic>> data,
-    int dataOffset,
-  ) {
-    final field = _getField(plot.fieldIndex);
-    final timeField = controller.data.getTimeField();
-    if (field == null || timeField == null) return;
+      // Prepare render context
+      final isMainChart = plot.plotType.isMainChart;
+      final isPanel = plot.plotType.isPanel;
+      final isOverlay = plot.plotType.isOverlay;
 
-    switch (plot.type) {
-      case 'line':
-        _drawLine(canvas, plot, field, timeField, data, dataOffset);
-        break;
-      case 'bar':
-        _drawBars(canvas, plot, field, timeField, data, dataOffset);
-        break;
-    }
-  }
-
-  dynamic _getField(dynamic fieldIndex) {
-    if (fieldIndex is int) {
-      // Find field by position in array
-      if (fieldIndex >= 0 && fieldIndex < controller.data.fields.length) {
-        return controller.data.fields[fieldIndex];
-      }
-      return null;
-    } else if (fieldIndex is String) {
-      // Find field by key
-      return controller.data.fields.firstWhereOrNull(
-        (f) => f.key == fieldIndex,
+      final context = RenderContext(
+        canvas: canvas,
+        size: size,
+        isMainChart: isMainChart,
+        isOverlay: isOverlay,
+        isPanel: isPanel,
+        fields: this.controller.data.fields,
+        data: visibleData,
       );
-    }
-    return null;
-  }
 
-  void _drawLine(
-    Canvas canvas,
-    dynamic plot,
-    dynamic field,
-    dynamic timeField,
-    List<List<dynamic>> data,
-    int dataOffset,
-  ) {
-    if (data.isEmpty || data.length < 2) return;
-    if (field == null || timeField == null) return;
+      // Get field reference for type-safe rendering
+      final timeField = controller.data.getTimeField();
+      if (timeField == null) continue;
 
-    final path = Path();
-    bool first = true;
-    int validPoints = 0;
-
-    for (int i = 0; i < data.length; i++) {
-      final point = data[i];
-      if (point.length <=
-          (timeField.index > field.index ? timeField.index : field.index)) {
-        continue;
-      }
-
-      try {
-        final time = (point[timeField.index] as num).toDouble();
-        final value = (point[field.index] as num).toDouble();
-
-        // NaN ve Infinity kontrolü
-        if (time.isNaN || time.isInfinite || value.isNaN || value.isInfinite) {
-          continue;
-        }
-
-        final screenPos = controller.worldToScreen(Offset(time, value));
-
-        if (first) {
-          path.moveTo(screenPos.dx, screenPos.dy);
-          first = false;
-        } else {
-          path.lineTo(screenPos.dx, screenPos.dy);
-        }
-        validPoints++;
-      } catch (e) {
-        // Hatalı veri noktasını atla
-        continue;
-      }
-    }
-
-    if (validPoints < 2) return;
-
-    final paint = Paint()
-      ..color = plot.color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawPath(path, paint);
-  }
-
-  void _drawBars(
-    Canvas canvas,
-    dynamic plot,
-    dynamic field,
-    dynamic timeField,
-    List<List<dynamic>> data,
-    int dataOffset,
-  ) {
-    if (data.isEmpty) return;
-    if (field == null || timeField == null) return;
-
-    // İlk iki noktadan bar'lar arasındaki piksel mesafesini hesapla
-    double spaceBetweenBars = 0;
-    if (data.length >= 2) {
-      final firstTime = (data[0][timeField.index] as num).toDouble();
-      final secondTime = (data[1][timeField.index] as num).toDouble();
-
-      final firstPos = controller.worldToScreen(Offset(firstTime, 0));
-      final secondPos = controller.worldToScreen(Offset(secondTime, 0));
-
-      spaceBetweenBars = (secondPos.dx - firstPos.dx).abs();
-    }
-
-    if (spaceBetweenBars <= 0) return;
-
-    // Bar genişliği: toplam alanın %70'i, boşluk: %30'u
-    final barWidthPixels = (spaceBetweenBars * 0.70).clamp(1.0, 500.0);
-
-    for (int i = 0; i < data.length; i++) {
-      final point = data[i];
-      if (point.length <=
-          (timeField.index > field.index ? timeField.index : field.index)) {
-        continue;
-      }
-
-      try {
-        final time = (point[timeField.index] as num).toDouble();
-        final value = (point[field.index] as num).toDouble();
-
-        // NaN ve Infinity kontrolü
-        if (time.isNaN || time.isInfinite || value.isNaN || value.isInfinite) {
-          continue;
-        }
-
-        Color barColor = plot.color ?? Colors.grey;
-        if (plot.style?.condition != null) {
-          final condition = plot.style!.condition!;
-          final isTrue = condition.evaluate(
-            value,
-            controller.data,
-            i + dataOffset,
-          );
-          barColor = condition.result.evaluate(isTrue);
-        }
-
-        final zeroPos = controller.worldToScreen(Offset(time, 0));
-        final valuePos = controller.worldToScreen(Offset(time, value));
-
-        // Bar'ı merkez noktasından sola/sağa eşit çiz
-        final rect = Rect.fromPoints(
-          Offset(
-            zeroPos.dx - barWidthPixels / 2,
-            zeroPos.dy < valuePos.dy ? zeroPos.dy : valuePos.dy,
-          ),
-          Offset(
-            zeroPos.dx + barWidthPixels / 2,
-            zeroPos.dy > valuePos.dy ? zeroPos.dy : valuePos.dy,
-          ),
-        );
-
-        final paint = Paint()
-          ..color = barColor
-          ..style = PaintingStyle.fill;
-
-        canvas.drawRect(rect, paint);
-      } catch (e) {
-        // Hatalı bar'ı atla
-        continue;
-      }
+      delegate.paint(context, plot, visibleData, timeField, null);
     }
   }
 

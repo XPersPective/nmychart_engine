@@ -7,6 +7,8 @@ import 'area_plot.dart';
 import 'histogram_plot.dart';
 import 'pie_plot.dart';
 import 'candlestick_plot.dart';
+import '../../widgets/painters/delegates/plot_render_delegate_factory.dart';
+import '../../widgets/painters/delegates/plot_render_delegate.dart';
 
 /// Base abstract class for all plot types
 /// Each plot type handles its own rendering logic
@@ -19,9 +21,19 @@ abstract class Plot {
   /// Type-safe getter for plot type
   PlotType get plotType;
 
+  /// Create a render delegate for this plot
+  /// Uses factory pattern to instantiate type-specific delegate
+  PlotRenderDelegate createDelegate() {
+    return PlotRenderDelegateFactory.createDelegate(this);
+  }
+
   /// Render the plot on canvas
-  /// Implementation varies by plot type
-  void render(Canvas canvas, Size size);
+  /// Delegates to type-specific implementation
+  void render(Canvas canvas, Size size) {
+    // Note: Actual rendering is now handled by PlotRenderDelegate pattern
+    // See PlotRenderDelegate.paint() for type-specific rendering implementations
+    // This method is kept for backwards compatibility
+  }
 
   /// Serialize to JSON
   Map<String, dynamic> toJson();
