@@ -144,13 +144,47 @@ class LinePlotRenderDelegate extends PlotRenderDelegate {
     }
   }
 
-  /// Parse conditions from plot
+  /// Parse conditions from plot - converts PlotCondition to PlotConditionData
   List<PlotConditionData>? _parseConditions(List<PlotCondition>? conditions) {
     if (conditions == null) return null;
     return conditions
         .map(
-          (c) => PlotConditionData(name: c.name ?? 'condition', type: 'custom'),
+          (c) => PlotConditionData(
+            name: c.name ?? 'condition',
+            type: 'threshold',
+            operator: c.operator.symbol,
+            value: _extractNumericValue(c.value1),
+            color: _extractColor(c.result),
+          ),
         )
         .toList();
+  }
+
+  /// Extract numeric value from condition value map
+  dynamic _extractNumericValue(Map<String, dynamic> valueMap) {
+    if (valueMap.isEmpty) return null;
+    // Try common keys for numeric values
+    for (final key in ['value', 'val', 'number', 'amount', 'threshold']) {
+      if (valueMap.containsKey(key) && valueMap[key] is num) {
+        return valueMap[key];
+      }
+    }
+    // Return first numeric value found
+    for (final value in valueMap.values) {
+      if (value is num) return value;
+    }
+    return null;
+  }
+
+  /// Extract color from condition result map
+  String? _extractColor(Map<String, dynamic> resultMap) {
+    if (resultMap.isEmpty) return null;
+    // Try common keys for color
+    for (final key in ['color', 'fill', 'stroke']) {
+      if (resultMap.containsKey(key) && resultMap[key] is String) {
+        return resultMap[key] as String;
+      }
+    }
+    return null;
   }
 }
