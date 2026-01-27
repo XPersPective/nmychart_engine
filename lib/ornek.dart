@@ -25,7 +25,7 @@ const String smaIndicatorExample = '''{
     {
       "name": "Period",
       "key": "period",
-      "valueType": "integer",
+      "type": "integer",
       "value": 14,
       "min": 2,
       "max": 100,
@@ -34,7 +34,7 @@ const String smaIndicatorExample = '''{
     {
       "name": "Smoothing",
       "key": "smoothing",
-      "valueType": "double",
+      "type": "double",
       "value": 0.5,
       "min": 0.0,
       "max": 1.0,

@@ -1,4 +1,6 @@
-import 'enums/enums.dart';
+import '../models/enums/enums.dart';
+
+enum FieldType { integer, double, string, timestamp }
 
 /// Base Chart Field Model
 /// Abstract class for all field types
@@ -16,41 +18,41 @@ abstract class ChartField {
   });
 
   /// Get the value type for this field
-  ValueType get valueType;
+  FieldType get type;
 
   /// Factory constructor for polymorphic JSON deserialization
   static ChartField fromJson(Map<String, dynamic> json) {
-    final valueTypeStr = json['valueType'] as String;
+    final type = FieldType.values.byName(json['type'] as String);
     final name = json['name'] as String;
     final key = json['key'] as String;
     final axis = json['axis'] as String;
-    final showInLegendType = _parseShowInLegendType(
+    final showInLegendType = ShowInLegendType.values.byName(
       json['showInLegendType'] as String,
     );
 
-    switch (valueTypeStr.toLowerCase()) {
-      case 'integer':
+    switch (type) {
+      case FieldType.integer:
         return IntegerField(
           name: name,
           key: key,
           axis: axis,
           showInLegendType: showInLegendType,
         );
-      case 'double':
+      case FieldType.double:
         return DoubleField(
           name: name,
           key: key,
           axis: axis,
           showInLegendType: showInLegendType,
         );
-      case 'string':
+      case FieldType.string:
         return StringField(
           name: name,
           key: key,
           axis: axis,
           showInLegendType: showInLegendType,
         );
-      case 'timestamp':
+      case FieldType.timestamp:
         return TimestampField(
           name: name,
           key: key,
@@ -58,48 +60,17 @@ abstract class ChartField {
           showInLegendType: showInLegendType,
           format: json['format'] as String,
         );
-      default:
-        return StringField(
-          name: name,
-          key: key,
-          axis: axis,
-          showInLegendType: showInLegendType,
-        );
-    }
+      }
   }
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
     'name': name,
     'key': key,
-    'valueType': valueType.toString().split('.').last,
-    'axis': axis,
-    'showInLegendType': _showInLegendTypeToString(showInLegendType),
+    'type': type.name,
+    'axis': axis, 
+    'showInLegendType': showInLegendType.name,
   };
-
-  static ShowInLegendType _parseShowInLegendType(String typeStr) {
-    switch (typeStr.toLowerCase()) {
-      case 'hidden':
-        return ShowInLegendType.hidden;
-      case 'onlyValue':
-        return ShowInLegendType.onlyValue;
-      case 'nameAndValue':
-        return ShowInLegendType.nameAndValue;
-      default:
-        return ShowInLegendType.nameAndValue;
-    }
-  }
-
-  static String _showInLegendTypeToString(ShowInLegendType type) {
-    switch (type) {
-      case ShowInLegendType.hidden:
-        return 'hidden';
-      case ShowInLegendType.onlyValue:
-        return 'onlyValue';
-      case ShowInLegendType.nameAndValue:
-        return 'nameAndValue';
-    }
-  }
 }
 
 /// Integer Field
@@ -112,7 +83,7 @@ class IntegerField extends ChartField {
   });
 
   @override
-  ValueType get valueType => ValueType.integer;
+  FieldType get type => FieldType.integer;
 }
 
 /// Double Field
@@ -125,7 +96,7 @@ class DoubleField extends ChartField {
   });
 
   @override
-  ValueType get valueType => ValueType.double;
+  FieldType get type => FieldType.double;
 }
 
 /// String Field
@@ -138,7 +109,7 @@ class StringField extends ChartField {
   });
 
   @override
-  ValueType get valueType => ValueType.string;
+  FieldType get type => FieldType.string;
 }
 
 /// Timestamp Field (requires format)
@@ -154,7 +125,7 @@ class TimestampField extends ChartField {
   });
 
   @override
-  ValueType get valueType => ValueType.timestamp;
+  FieldType get type => FieldType.timestamp;
 
   @override
   Map<String, dynamic> toJson() => {...super.toJson(), 'format': format};

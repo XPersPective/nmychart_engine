@@ -1,4 +1,4 @@
-import '../enums/enums.dart';
+import '../../models/enums/enums.dart';
 
 /// Plot Condition Model
 /// Defines conditional styling/behavior for plots

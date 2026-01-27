@@ -1,4 +1,4 @@
-export 'value_type.dart';
+export '../../sonmodeller/value_type.dart';
 export 'time_format.dart';
 export 'plot_type.dart';
 export 'condition_operator.dart';
@@ -7,4 +7,4 @@ export 'direction.dart';
 export 'guide_type.dart';
 export 'axis_type.dart';
 export 'stroke_style.dart';
-export 'show_in_legend_type.dart';
+export '../../sonmodeller/show_in_legend_type.dart';

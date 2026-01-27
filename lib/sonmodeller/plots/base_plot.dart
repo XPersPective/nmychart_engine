@@ -1,4 +1,4 @@
-import '../enums/enums.dart';
+import '../../models/enums/enums.dart';
 import 'plot_condition.dart';
 import 'line_plot.dart';
 import 'bar_plot.dart';

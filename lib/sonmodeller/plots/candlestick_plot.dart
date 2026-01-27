@@ -1,4 +1,4 @@
-import '../enums/enums.dart';
+import '../../models/enums/enums.dart';
 import 'base_plot.dart';
 
 /// Candlestick plot - renders OHLC data for financial charts

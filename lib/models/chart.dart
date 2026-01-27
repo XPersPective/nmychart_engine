@@ -1,7 +1,7 @@
-import 'plots/plots.dart';
-import 'chart_field.dart';
+import '../sonmodeller/plots/plots.dart';
+import '../sonmodeller/chart_field.dart';
 import 'chart_metadata.dart';
-import 'chart_input.dart';
+import '../sonmodeller/chart_input.dart';
 import 'chart_notation.dart';
 import 'chart_guide.dart';
 

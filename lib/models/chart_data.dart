@@ -1,20 +1,20 @@
-import 'plots/plots.dart';
-import 'chart_field.dart';
+import '../sonmodeller/plots/plots.dart';
+import '../sonmodeller/chart_field.dart';
 import 'chart_metadata.dart';
 import 'chart_data_source.dart';
-import 'chart_input.dart';
+import '../sonmodeller/chart_input.dart';
 import 'chart_notation.dart';
 import 'chart_guide.dart';
 
 /// Chart Data Model
 /// Container for chart configuration and data
 class ChartData {
+  final ChartMetadata metadata;
+  final List<ChartInput> inputs;
+  final List<ChartField> fields;
   final List<Plot> plots;
   final List<List<dynamic>> data;
-  final ChartMetadata metadata;
   final ChartDataSource dataSource;
-  final List<ChartField> fields;
-  final List<ChartInput> inputs;
   final List<ChartNotation> notations;
   final List<ChartGuide> guides;
 

@@ -1,7 +1,7 @@
-import 'enums/enums.dart';
+import '../models/enums/enums.dart';
 
-/// Base Chart Input Model
-/// Abstract class for all input types
+enum InputType { integer, double, string, symbol, interval }
+
 abstract class ChartInput {
   final String name;
   final String key;
@@ -14,45 +14,45 @@ abstract class ChartInput {
   });
 
   /// Get the value type for this input
-  ValueType get valueType;
+  InputType get type;
 
   /// Factory constructor for polymorphic JSON deserialization
   static ChartInput fromJson(Map<String, dynamic> json) {
-    final valueTypeStr = json['valueType'] as String;
+    final type = InputType.values.byName(json['type'] as String);
     final name = json['name'] as String;
     final key = json['key'] as String;
     final value = json['value'];
-    final showInLegendType = _parseShowInLegendType(
-      json['showInLegendType'] as String? ?? 'nameAndValue',
+    final showInLegendType = ShowInLegendType.values.byName(
+      json['showInLegendType'] as String,
     );
 
-    switch (valueTypeStr.toLowerCase()) {
-      case 'integer':
+    switch (type) {
+      case InputType.integer:
         return IntegerInput(
           name: name,
           key: key,
           value: value as int,
-          min: json['min'] as int?,
-          max: json['max'] as int?,
+          min: json['min'] as int,
+          max: json['max'] as int,
           showInLegendType: showInLegendType,
         );
-      case 'double':
+      case InputType.double:
         return DoubleInput(
           name: name,
           key: key,
           value: value as double,
-          min: json['min'] as double?,
-          max: json['max'] as double?,
+          min: json['min'] as double,
+          max: json['max'] as double,
           showInLegendType: showInLegendType,
         );
-      case 'string':
+      case InputType.string:
         return StringInput(
           name: name,
           key: key,
           value: value as String,
           showInLegendType: showInLegendType,
         );
-      case 'symbol':
+      case InputType.symbol:
         return SymbolInput(
           name: name,
           key: key,
@@ -60,15 +60,8 @@ abstract class ChartInput {
           quote: json['quote'] as String,
           showInLegendType: showInLegendType,
         );
-      case 'interval':
+      case InputType.interval:
         return IntervalInput(
-          name: name,
-          key: key,
-          value: value as String,
-          showInLegendType: showInLegendType,
-        );
-      default:
-        return StringInput(
           name: name,
           key: key,
           value: value as String,
@@ -81,90 +74,63 @@ abstract class ChartInput {
   Map<String, dynamic> toJson() => {
     'name': name,
     'key': key,
-    'valueType': valueType.toString().split('.').last,
-    'showInLegendType': _showInLegendTypeToString(showInLegendType),
+    'type': type.name,
+    'showInLegendType': showInLegendType.name,
   };
-
-  static ShowInLegendType _parseShowInLegendType(String typeStr) {
-    switch (typeStr.toLowerCase()) {
-      case 'hidden':
-        return ShowInLegendType.hidden;
-      case 'onlyvalue':
-        return ShowInLegendType.onlyValue;
-      case 'nameandvalue':
-        return ShowInLegendType.nameAndValue;
-      default:
-        return ShowInLegendType.nameAndValue;
-    }
-  }
-
-  static String _showInLegendTypeToString(ShowInLegendType type) {
-    switch (type) {
-      case ShowInLegendType.hidden:
-        return 'hidden';
-      case ShowInLegendType.onlyValue:
-        return 'onlyValue';
-      case ShowInLegendType.nameAndValue:
-        return 'nameAndValue';
-    }
-  }
 }
 
-/// Integer Input (with int min/max)
 class IntegerInput extends ChartInput {
   final int value;
-  final int? min;
-  final int? max;
+  final int min;
+  final int max;
 
   IntegerInput({
     required super.name,
     required super.key,
     required this.value,
-    this.min,
-    this.max,
+    required this.min,
+    required this.max,
     super.showInLegendType,
   });
 
   @override
-  ValueType get valueType => ValueType.integer;
+  InputType get type => InputType.integer;
 
   @override
   Map<String, dynamic> toJson() => {
     ...super.toJson(),
     'value': value,
-    if (min != null) 'min': min,
-    if (max != null) 'max': max,
+    'min': min,
+    'max': max,
   };
 }
 
-/// Double Input (with double min/max)
 class DoubleInput extends ChartInput {
   final double value;
-  final double? min;
-  final double? max;
+  final double min;
+  final double max;
 
   DoubleInput({
     required super.name,
     required super.key,
     required this.value,
-    this.min,
-    this.max,
+    required this.min,
+    required this.max,
     super.showInLegendType,
   });
 
   @override
-  ValueType get valueType => ValueType.double;
+  InputType get type => InputType.double;
 
   @override
   Map<String, dynamic> toJson() => {
     ...super.toJson(),
     'value': value,
-    if (min != null) 'min': min,
-    if (max != null) 'max': max,
+    'min': min,
+    'max': max,
   };
 }
 
-/// String Input (no min/max)
 class StringInput extends ChartInput {
   final String value;
 
@@ -176,14 +142,12 @@ class StringInput extends ChartInput {
   });
 
   @override
-  ValueType get valueType => ValueType.string;
+  InputType get type => InputType.string;
 
   @override
   Map<String, dynamic> toJson() => {...super.toJson(), 'value': value};
 }
 
-/// Symbol Input (finansal çiftler: BTC/USDT)
-/// Base ve Quote ayrı tutulur
 class SymbolInput extends ChartInput {
   final String base;
   final String quote;
@@ -200,7 +164,7 @@ class SymbolInput extends ChartInput {
   String get symbol => '$base/$quote';
 
   @override
-  ValueType get valueType => ValueType.symbol;
+  InputType get type => InputType.symbol;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -223,7 +187,7 @@ class IntervalInput extends ChartInput {
   });
 
   @override
-  ValueType get valueType => ValueType.interval;
+  InputType get type => InputType.interval;
 
   @override
   Map<String, dynamic> toJson() => {...super.toJson(), 'value': value};

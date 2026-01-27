@@ -5,11 +5,11 @@
 library;
 
 export 'enums/enums.dart';
-export 'plots/plots.dart';
+export '../sonmodeller/plots/plots.dart';
 export 'chart_data.dart';
 export 'chart_data_source.dart';
-export 'chart_input.dart';
-export 'chart_field.dart';
+export '../sonmodeller/chart_input.dart';
+export '../sonmodeller/chart_field.dart';
 export 'chart_metadata.dart';
 export 'chart_notation.dart';
 export 'chart_guide.dart';

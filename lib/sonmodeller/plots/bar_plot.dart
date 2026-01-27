@@ -1,12 +1,12 @@
-import '../enums/enums.dart';
+import '../../models/enums/enums.dart';
 import 'base_plot.dart';
 
-/// Line plot - renders continuous lines connecting data points
-class LinePlot extends Plot {
+/// Bar plot - renders vertical or horizontal bars
+class BarPlot extends Plot {
   final String? fieldKeyX;
   final String? fieldKeyY;
 
-  LinePlot({
+  BarPlot({
     this.fieldKeyX,
     this.fieldKeyY,
     super.color,
@@ -14,7 +14,7 @@ class LinePlot extends Plot {
   });
 
   @override
-  PlotType get plotType => PlotType.line;
+  PlotType get plotType => PlotType.bar;
 
   @override
   Map<String, dynamic> toJson() => {

@@ -1,12 +1,12 @@
-import '../enums/enums.dart';
+import '../../models/enums/enums.dart';
 import 'base_plot.dart';
 
-/// Area plot - renders filled areas under lines
-class AreaPlot extends Plot {
+/// Line plot - renders continuous lines connecting data points
+class LinePlot extends Plot {
   final String? fieldKeyX;
   final String? fieldKeyY;
 
-  AreaPlot({
+  LinePlot({
     this.fieldKeyX,
     this.fieldKeyY,
     super.color,
@@ -14,7 +14,7 @@ class AreaPlot extends Plot {
   });
 
   @override
-  PlotType get plotType => PlotType.area;
+  PlotType get plotType => PlotType.line;
 
   @override
   Map<String, dynamic> toJson() => {
