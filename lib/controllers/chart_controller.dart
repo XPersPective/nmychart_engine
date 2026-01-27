@@ -52,12 +52,13 @@ class ChartController extends ChangeNotifier {
     double minValue = double.infinity;
     double maxValue = -double.infinity;
 
-    for (final point in _data.data) {
-      if (point.length > timeFieldIndex) {
-        final time = (point[timeFieldIndex] as num).toDouble();
-        minTime = math.min(minTime, time);
-        maxTime = math.max(maxTime, time);
-      }
+    for (int pointIndex = 0; pointIndex < _data.data.length; pointIndex++) {
+      final point = _data.data[pointIndex];
+      
+      // Use data point index as time value (works for any time field type)
+      final time = pointIndex.toDouble();
+      minTime = math.min(minTime, time);
+      maxTime = math.max(maxTime, time);
 
       for (int i = 0; i < _data.fields.length; i++) {
         final field = _data.fields[i];
@@ -66,9 +67,14 @@ class ChartController extends ChangeNotifier {
             (field.valueType == ValueType.double ||
                 field.valueType == ValueType.integer)) {
           if (point.length > i) {
-            final value = (point[i] as num).toDouble();
-            minValue = math.min(minValue, value);
-            maxValue = math.max(maxValue, value);
+            try {
+              final value = (point[i] as num).toDouble();
+              minValue = math.min(minValue, value);
+              maxValue = math.max(maxValue, value);
+            } catch (e) {
+              // Skip non-numeric values
+              continue;
+            }
           }
         }
       }
