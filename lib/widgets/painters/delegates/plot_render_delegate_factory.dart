@@ -10,18 +10,18 @@ import '../../../models/models.dart';
 /// Factory for creating plot render delegates
 class PlotRenderDelegateFactory {
   static PlotRenderDelegate createDelegate(Plot plot) {
-    switch (plot.runtimeType) {
-      case LinePlot:
+    switch (plot) {
+      case LinePlot():
         return LinePlotRenderDelegate();
-      case BarPlot:
+      case BarPlot():
         return BarPlotRenderDelegate();
-      case AreaPlot:
+      case AreaPlot():
         return AreaPlotRenderDelegate();
-      case HistogramPlot:
+      case HistogramPlot():
         return HistogramPlotRenderDelegate();
-      case PiePlot:
+      case PiePlot():
         return PiePlotRenderDelegate();
-      case CandlestickPlot:
+      case CandlestickPlot():
         return CandlestickPlotRenderDelegate();
       default:
         throw UnsupportedError('Unknown plot type: ${plot.runtimeType}');

@@ -81,9 +81,9 @@ abstract class ChartField {
     switch (typeStr.toLowerCase()) {
       case 'hidden':
         return ShowInLegendType.hidden;
-      case 'onlyvalue':
+      case 'onlyValue':
         return ShowInLegendType.onlyValue;
-      case 'nameandvalue':
+      case 'nameAndValue':
         return ShowInLegendType.nameAndValue;
       default:
         return ShowInLegendType.nameAndValue;
