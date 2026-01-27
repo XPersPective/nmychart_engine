@@ -1,5 +1,4 @@
 import '../enums/enums.dart';
-import 'plot_condition.dart';
 import 'base_plot.dart';
 
 /// Pie plot - renders pie/donut charts
@@ -14,9 +13,9 @@ class PiePlot extends Plot {
     this.fieldKeyLabel,
     this.fieldKeyY,
     this.colors,
-    String? color,
-    List<PlotCondition>? conditions,
-  }) : super(color: color, conditions: conditions);
+    super.color,
+    super.conditions,
+  });
 
   @override
   PlotType get plotType => PlotType.pie;

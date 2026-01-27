@@ -80,7 +80,7 @@ class PiePlotRenderDelegate extends PlotRenderDelegate {
       final percentage = ((value / total) * 100).toStringAsFixed(1);
       _drawText(
         context.canvas,
-        percentage + '%',
+        '$percentage%',
         Offset(labelX, labelY),
         Colors.white,
       );

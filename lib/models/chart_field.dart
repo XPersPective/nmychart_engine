@@ -105,16 +105,11 @@ abstract class ChartField {
 /// Integer Field
 class IntegerField extends ChartField {
   IntegerField({
-    required String name,
-    required String key,
-    required String axis,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(
-         name: name,
-         key: key,
-         axis: axis,
-         showInLegendType: showInLegendType,
-       );
+    required super.name,
+    required super.key,
+    required super.axis,
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.integer;
@@ -123,16 +118,11 @@ class IntegerField extends ChartField {
 /// Double Field
 class DoubleField extends ChartField {
   DoubleField({
-    required String name,
-    required String key,
-    required String axis,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(
-         name: name,
-         key: key,
-         axis: axis,
-         showInLegendType: showInLegendType,
-       );
+    required super.name,
+    required super.key,
+    required super.axis,
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.double;
@@ -141,16 +131,11 @@ class DoubleField extends ChartField {
 /// String Field
 class StringField extends ChartField {
   StringField({
-    required String name,
-    required String key,
-    required String axis,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(
-         name: name,
-         key: key,
-         axis: axis,
-         showInLegendType: showInLegendType,
-       );
+    required super.name,
+    required super.key,
+    required super.axis,
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.string;
@@ -161,17 +146,12 @@ class TimestampField extends ChartField {
   final String format;
 
   TimestampField({
-    required String name,
-    required String key,
-    required String axis,
+    required super.name,
+    required super.key,
+    required super.axis,
     required this.format,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(
-         name: name,
-         key: key,
-         axis: axis,
-         showInLegendType: showInLegendType,
-       );
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.timestamp;

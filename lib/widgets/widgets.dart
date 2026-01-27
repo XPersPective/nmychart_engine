@@ -6,6 +6,7 @@
 /// - chart/: Main chart widgets (NMychart, state management)
 /// - painters/: Canvas painters for rendering different plot types
 /// - gestures/: Touch/mouse gesture handlers
+library;
 
 export 'chart/nmychart.dart'; 
 export 'gestures/chart_gesture_handler.dart';

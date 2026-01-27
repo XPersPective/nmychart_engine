@@ -1,5 +1,4 @@
 import '../enums/enums.dart';
-import 'plot_condition.dart';
 import 'base_plot.dart';
 
 /// Histogram plot - renders distribution data
@@ -12,9 +11,9 @@ class HistogramPlot extends Plot {
     this.fieldKey,
     this.fieldKeyY,
     this.binCount,
-    String? color,
-    List<PlotCondition>? conditions,
-  }) : super(color: color, conditions: conditions);
+    super.color,
+    super.conditions,
+  });
 
   @override
   PlotType get plotType => PlotType.histogram;

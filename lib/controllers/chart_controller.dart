@@ -54,7 +54,7 @@ class ChartController extends ChangeNotifier {
 
     for (int pointIndex = 0; pointIndex < _data.data.length; pointIndex++) {
       final point = _data.data[pointIndex];
-      
+
       // Use data point index as time value (works for any time field type)
       final time = pointIndex.toDouble();
       minTime = math.min(minTime, time);
@@ -175,26 +175,16 @@ class ChartController extends ChangeNotifier {
     final timeField = _data.getTimeField();
     if (timeField == null) return Range(0, _data.data.length);
 
-    // Find timeField position in data array by matching key
-    int timeFieldIndex = -1;
-    for (int i = 0; i < _data.fields.length; i++) {
-      if (_data.fields[i].key == timeField.key) {
-        timeFieldIndex = i;
-        break;
-      }
-    }
-
-    if (timeFieldIndex == -1) return Range(0, _data.data.length);
-
     final leftWorld = screenToWorld(Offset(0, 0)).dx;
     final rightWorld = screenToWorld(Offset(_canvasSize.width, 0)).dx;
 
     int startIndex = 0;
     int endIndex = _data.data.length;
 
-    // Find start index
+    // Use data point index as time value (same as _calculateViewport)
+    // This works for any time field type (String, num, DateTime)
     for (int i = 0; i < _data.data.length; i++) {
-      final time = (_data.data[i][timeFieldIndex] as num).toDouble();
+      final time = i.toDouble();
       if (time >= leftWorld) {
         startIndex = math.max(0, i - 2);
         break;
@@ -203,7 +193,7 @@ class ChartController extends ChangeNotifier {
 
     // Find end index
     for (int i = startIndex; i < _data.data.length; i++) {
-      final time = (_data.data[i][timeFieldIndex] as num).toDouble();
+      final time = i.toDouble();
       if (time > rightWorld) {
         endIndex = math.min(_data.data.length, i + 2);
         break;

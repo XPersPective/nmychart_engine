@@ -1,5 +1,4 @@
 import '../enums/enums.dart';
-import 'plot_condition.dart';
 import 'base_plot.dart';
 
 /// Line plot - renders continuous lines connecting data points
@@ -10,9 +9,9 @@ class LinePlot extends Plot {
   LinePlot({
     this.fieldKeyX,
     this.fieldKeyY,
-    String? color,
-    List<PlotCondition>? conditions,
-  }) : super(color: color, conditions: conditions);
+    super.color,
+    super.conditions,
+  });
 
   @override
   PlotType get plotType => PlotType.line;

@@ -1,5 +1,4 @@
 import '../enums/enums.dart';
-import 'plot_condition.dart';
 import 'base_plot.dart';
 
 /// Area plot - renders filled areas under lines
@@ -10,9 +9,9 @@ class AreaPlot extends Plot {
   AreaPlot({
     this.fieldKeyX,
     this.fieldKeyY,
-    String? color,
-    List<PlotCondition>? conditions,
-  }) : super(color: color, conditions: conditions);
+    super.color,
+    super.conditions,
+  });
 
   @override
   PlotType get plotType => PlotType.area;

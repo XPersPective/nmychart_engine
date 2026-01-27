@@ -1,5 +1,4 @@
 import '../enums/enums.dart';
-import 'plot_condition.dart';
 import 'base_plot.dart';
 
 /// Candlestick plot - renders OHLC data for financial charts
@@ -18,9 +17,9 @@ class CandlestickPlot extends Plot {
     this.fieldKeyClose,
     this.upColor,
     this.downColor,
-    String? color,
-    List<PlotCondition>? conditions,
-  }) : super(color: color, conditions: conditions);
+    super.color,
+    super.conditions,
+  });
 
   @override
   PlotType get plotType => PlotType.candlestick;

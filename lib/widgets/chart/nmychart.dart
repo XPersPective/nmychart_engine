@@ -50,7 +50,12 @@ class _NMychartState extends State<NMychart> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final size = Size(constraints.maxWidth, constraints.maxHeight);
-          _controller.updateCanvasSize(size);
+          // updateCanvasSize should be called in post-frame callback, not during build
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _controller.updateCanvasSize(size);
+            }
+          });
 
           return Listener(
             onPointerSignal: (pointerSignal) {
@@ -124,23 +129,23 @@ class _NMychartPainter extends CustomPainter {
   }
 
   void _drawPlots(Canvas canvas, Size size) {
-    final visibleRange = this.controller.getVisibleRange();
+    final visibleRange = controller.getVisibleRange();
     if (visibleRange.start >= visibleRange.end ||
-        this.controller.data.data.isEmpty) {
+        controller.data.data.isEmpty) {
       return;
     }
 
     // Sınırları kontrol et
-    final start = visibleRange.start.clamp(0, this.controller.data.data.length);
-    final end = visibleRange.end.clamp(start, this.controller.data.data.length);
+    final start = visibleRange.start.clamp(0, controller.data.data.length);
+    final end = visibleRange.end.clamp(start, controller.data.data.length);
 
     if (start >= end) {
       return;
     }
 
-    final visibleData = this.controller.data.data.sublist(start, end);
+    final visibleData = controller.data.data.sublist(start, end);
 
-    for (final plot in this.controller.data.plots) {
+    for (final plot in controller.data.plots) {
       // Use delegate pattern for rendering
       final delegate = PlotRenderDelegateFactory.createDelegate(plot);
 
@@ -155,7 +160,7 @@ class _NMychartPainter extends CustomPainter {
         isMainChart: isMainChart,
         isOverlay: isOverlay,
         isPanel: isPanel,
-        fields: this.controller.data.fields,
+        fields: controller.data.fields,
         data: visibleData,
       );
 
@@ -172,11 +177,11 @@ class _NMychartPainter extends CustomPainter {
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
 
     // Y-axis labels - SOL TARAF
-    final viewport = this.controller.viewport;
+    final viewport = controller.viewport;
     if (viewport.height > 0) {
       for (int i = 0; i <= 5; i++) {
         final value = viewport.top + (viewport.height * i / 5);
-        final yPos = this.controller.worldToScreen(Offset(0, value)).dy;
+        final yPos = controller.worldToScreen(Offset(0, value)).dy;
 
         final text = TextSpan(text: value.toStringAsFixed(1), style: textStyle);
         textPainter.text = text;
@@ -189,7 +194,7 @@ class _NMychartPainter extends CustomPainter {
     if (viewport.height > 0) {
       for (int i = 0; i <= 5; i++) {
         final value = viewport.top + (viewport.height * i / 5);
-        final yPos = this.controller.worldToScreen(Offset(0, value)).dy;
+        final yPos = controller.worldToScreen(Offset(0, value)).dy;
 
         final text = TextSpan(text: value.toStringAsFixed(1), style: textStyle);
         textPainter.text = text;
@@ -208,7 +213,7 @@ class _NMychartPainter extends CustomPainter {
     if (viewport.width > 0) {
       for (int i = 0; i <= 5; i++) {
         final time = viewport.left + (viewport.width * i / 5);
-        final xPos = this.controller.worldToScreen(Offset(time, 0)).dx;
+        final xPos = controller.worldToScreen(Offset(time, 0)).dx;
 
         final date = DateTime.fromMillisecondsSinceEpoch(time.toInt());
         final text = TextSpan(
@@ -230,6 +235,6 @@ class _NMychartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_NMychartPainter oldDelegate) {
-    return oldDelegate.controller != this.controller;
+    return oldDelegate.controller != controller;
   }
 }

@@ -117,13 +117,13 @@ class IntegerInput extends ChartInput {
   final int? max;
 
   IntegerInput({
-    required String name,
-    required String key,
+    required super.name,
+    required super.key,
     required this.value,
     this.min,
     this.max,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(name: name, key: key, showInLegendType: showInLegendType);
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.integer;
@@ -144,13 +144,13 @@ class DoubleInput extends ChartInput {
   final double? max;
 
   DoubleInput({
-    required String name,
-    required String key,
+    required super.name,
+    required super.key,
     required this.value,
     this.min,
     this.max,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(name: name, key: key, showInLegendType: showInLegendType);
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.double;
@@ -169,11 +169,11 @@ class StringInput extends ChartInput {
   final String value;
 
   StringInput({
-    required String name,
-    required String key,
+    required super.name,
+    required super.key,
     required this.value,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(name: name, key: key, showInLegendType: showInLegendType);
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.string;
@@ -189,12 +189,12 @@ class SymbolInput extends ChartInput {
   final String quote;
 
   SymbolInput({
-    required String name,
-    required String key,
+    required super.name,
+    required super.key,
     required this.base,
     required this.quote,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(name: name, key: key, showInLegendType: showInLegendType);
+    super.showInLegendType,
+  });
 
   /// Tam sembol: BTC/USDT
   String get symbol => '$base/$quote';
@@ -216,11 +216,11 @@ class IntervalInput extends ChartInput {
   final String value;
 
   IntervalInput({
-    required String name,
-    required String key,
+    required super.name,
+    required super.key,
     required this.value,
-    ShowInLegendType showInLegendType = ShowInLegendType.nameAndValue,
-  }) : super(name: name, key: key, showInLegendType: showInLegendType);
+    super.showInLegendType,
+  });
 
   @override
   ValueType get valueType => ValueType.interval;
