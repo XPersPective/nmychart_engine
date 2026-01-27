@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   Widget _buildExampleTile(int index, String title) {
     return ListTile(
       selected: _selectedExample == index,
-      selectedTileColor: Colors.blue.withOpacity(0.3),
+      selectedTileColor: Colors.blue.withValues(alpha: 0.3),
       title: Text(
         title,
         style: TextStyle(

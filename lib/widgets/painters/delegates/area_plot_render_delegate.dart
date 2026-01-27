@@ -64,7 +64,7 @@ class AreaPlotRenderDelegate extends PlotRenderDelegate {
     context.canvas.drawPath(
       path,
       Paint()
-        ..color = baseColor.withOpacity(0.3)
+        ..color = baseColor.withValues(alpha: 0.3)
         ..style = PaintingStyle.fill,
     );
 

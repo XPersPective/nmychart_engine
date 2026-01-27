@@ -72,7 +72,7 @@ class BarPlotRenderDelegate extends PlotRenderDelegate {
       context.canvas.drawRect(
         rect,
         Paint()
-          ..color = barColor.withOpacity(0.8)
+          ..color = barColor.withValues(alpha: 0.8)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.0,
       );

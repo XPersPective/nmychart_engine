@@ -126,7 +126,7 @@ class CandlestickPlotRenderDelegate extends PlotRenderDelegate {
       context.canvas.drawRect(
         bodyRect,
         Paint()
-          ..color = bodyColor.withOpacity(0.8)
+          ..color = bodyColor.withValues(alpha: 0.8)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.0,
       );

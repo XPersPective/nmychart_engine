@@ -77,7 +77,7 @@ class HistogramPlotRenderDelegate extends PlotRenderDelegate {
       context.canvas.drawRect(
         rect,
         Paint()
-          ..color = baseColor.withOpacity(0.8)
+          ..color = baseColor.withValues(alpha: 0.8)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.0,
       );

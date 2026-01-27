@@ -137,7 +137,7 @@ abstract class PlotRenderDelegate {
     if (!context.shouldDrawGrid) return;
 
     final gridPaint = Paint()
-      ..color = Colors.grey.withOpacity(0.2)
+      ..color = Colors.grey.withValues(alpha: 0.2)
       ..strokeWidth = 0.5;
 
     // Vertical grid lines
