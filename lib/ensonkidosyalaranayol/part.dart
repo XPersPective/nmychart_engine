@@ -1,19 +1,66 @@
-const candlestickExample = {
-  "metadata": {},
-  "menubar": {},
-  "legend": [{}, {}, {}],
-  "inputs": [{}, {}, {}],
-  "fields": [{}, {}, {}],
-  "data": [[], [], []],
-  "plots": [{}, {}, {}],
-  "guides": [{}, {}, {}],
-  "notations": [{}, {}, {}],
-  "rules": [{}, {}, {}],
-  "styles": [{}, {}, {}],
-};
+ 
+ 
 
+### Referans Sistemi Kuralları
 
+1. **Referans ve Literal Ayrımı:**
 
+   * Başında `@` varsa → **referans**
+   * Başında `@` yoksa → **literal (sabit değer)**
+
+2. **Geçerli Scope’lar:**
+
+   ```
+   inputs
+   fields
+   plots
+   guides
+   notations
+   rules
+   styles
+   ```
+
+3. **Referans Türleri:**
+
+   * **Rules Referansı:** Başında `@rules` varsa → **kural referansı**
+
+     * Örnek:
+
+       ```
+       @rules.trendRule(@styles.bullGreen, @styles.bearRed, @styles.neutralGray)
+       ```
+     * İçerik genellikle üç renk tipinden oluşur:
+
+       * Pozitif → bull/rising
+       * Negatif → bear/falling
+       * Nötr → neutral
+     * Renk değerleri **literal** veya **stil referansı** olabilir.
+
+   * **Field Referansı:** Başında `@fields` varsa → **field referansı**
+
+     * Eğer sonu `.value` ile bitiyorsa → **data referansı** (veri serisinden periyot bazlı değer)
+
+       ```
+       @fields.clos.value[0]   → bu periyot
+       @fields.clos.value[-1]  → bir önceki periyot
+       ```
+     * Eğer sonu `.value` ile bitmiyorsa → **field property referansı** (field içindeki özellik)
+
+       ```
+       @fields.clos.high       → high özelliği
+       @fields.clos.open       → open özelliği
+       ```
+
+4. **Parser İşleyişi:**
+
+   * `@` yok → literal değer olarak kullanılır.
+   * `@` var → resolver çalıştırılır.
+   * `@rules` referansı → kural fonksiyonu çalıştırılır.
+   * `@fields` referansı → data veya field property erişimi yapılır.
+
+---
+ 
+  
 /*
 
 

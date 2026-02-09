@@ -223,3 +223,151 @@ Chart tanımının **semantik sürümü**.
 
 `updatedAt`
 Son güncelleme zamanı (ISO-8601).
+
+
+### Değer Atama Kuralları
+
+1. **Referans ve Literal Ayrımı:**
+
+   * Başında `@` varsa → **referans**
+   * Başında `@` yoksa → **literal (sabit değer)**
+
+2. **Geçerli Scope’lar:**
+
+   ```
+   inputs
+   fields
+   plots
+   guides
+   notations
+   rules
+   styles
+   ```
+
+3. **Referans Türleri:**
+
+   * **Rules Referansı:** Başında `@rules` varsa → **kural referansı**
+
+     * Örnek:
+
+       ```
+       @rules.trendRule(@styles.bullGreen, @styles.bearRed, @styles.neutralGray)
+       ```
+     * İçerik genellikle üç renk tipinden oluşur:
+
+       * Pozitif → bull/rising
+       * Negatif → bear/falling
+       * Nötr → neutral
+     * Renk değerleri **literal** veya **stil referansı** olabilir.
+
+   * **Field Referansı:** Başında `@fields` varsa → **field referansı**
+
+     * Eğer sonu `.value` ile bitiyorsa → **data referansı** (veri serisinden periyot bazlı değer)
+
+       ```
+       @fields.clos.value[0]   → bu periyot
+       @fields.clos.value[-1]  → bir önceki periyot
+       ```
+     * Eğer sonu `.value` ile bitmiyorsa → **field property referansı** (field içindeki özellik)
+
+       ```
+       @fields.clos.high       → high özelliği
+       @fields.clos.open       → open özelliği
+       ```
+
+4. **Parser İşleyişi:**
+
+   * `@` yok → literal değer olarak kullanılır.
+   * `@` var → resolver çalıştırılır.
+   * `@rules` referansı → kural fonksiyonu çalıştırılır.
+   * `@fields` referansı → data veya field property erişimi yapılır.
+
+Tamam, medya dosyasına yapıştırılacak şekilde, font/format değiştirmeden ve senin verdiğin yapıya uyacak şekilde **Rules (Kurallar)** bölümünü ekleyelim. Kod blokları ve metinler MD uyumlu, sade fontlu olacak.
+
+## Rules (Kurallar)
+
+Kurallar, veri ve field değerlerini karşılaştırmak ve duruma göre işaretlemek için kullanılır. Her kural **pozitif, negatif ve nötr** sonuçları içerir ve karşılaştırmalar **double türünde** yapılır.
+
+### Kural Yapısı
+
+* `id` → kuralın benzersiz kimliği
+* `positive` → koşul pozitif olduğunda geçerli ifade
+* `negative` → koşul negatif olduğunda geçerli ifade
+* `neutral` → koşul nötr olduğunda geçerli ifade
+
+**Örnek JSON:**
+
+```json
+"rules": [
+  {
+    "id": "trendRule",
+    "positive": "@fields.clos.value > @fields.open.value",
+    "negative": "@fields.clos.value <= @fields.open.value",
+    "neutral": "@fields.clos.value == @fields.open.value"
+  }
+]
+```
+
+* `@fields.clos.value` ve `@fields.open.value` → veri referanslarıdır.
+* Literal değerler de kullanılabilir:
+
+```json
+"positive": 1.0,
+"negative": 0.0,
+"neutral": 0.5
+```
+
+### Kurala Erişim
+
+Kurallara referans sistemi ile erişilebilir. Erişim formatı:
+
+```
+@rules.<ruleId>(<parametreler>)
+```
+
+* `@rules` → scope
+* `<ruleId>` → kuralın ID’si
+* `<parametreler>` → kural parametreleri, örneğin stil referansları
+
+**Örnek Erişim:**
+
+```json
+"trendCheck": "@rules.trendRule(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)"
+```
+
+* Bu çağrı, `trendRule` kuralının sonucunu doğrudan verir.
+* Parametreler, kuralın çalışması için gereken stil veya değer referanslarıdır.
+
+Tamam. `styles` alanını açıklayacak şekilde kısa ve net bir metin hazırlayalım. Medya dosyasına yapıştırılacak biçimde:
+
+---
+
+### Styles (Stiller)
+
+`styles` alanı, chart içinde **kullanılacak renk ve görsel stil tanımlarını** içerir. Her stil, bir **ID** ve ilgili görsel özellikleri (ör. renk) ile tanımlanır. Bu stiller, chart’ın farklı alanlarında veya kurallarda (`rules`) referansla kullanılabilir.
+
+**Örnek JSON:**
+
+```json
+"styles": [
+  { "id": "bullGreen", "color": "#00FF00" },
+  { "id": "bearRed", "color": "#FF0000" },
+  { "id": "neutralGray", "color": "#888888" }
+]
+```
+
+**Açıklama:**
+
+* `bullGreen` → pozitif trend veya yükseliş için kullanılacak renk
+* `bearRed` → negatif trend veya düşüş için kullanılacak renk
+* `neutralGray` → nötr durumlar için kullanılacak renk
+* Kurallar veya plotlar bu stillere `@styles.<id>` formatında referans verebilir:
+
+```json
+"trendCheck": "@rules.trendRule(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)"
+```
+
+* Bu alan, chart’ta kullanılacak tüm hazır görsel stillerin merkezi tanımıdır ve herhangi bir chart yapısında tekrar tekrar kullanılabilir.
+
+
+

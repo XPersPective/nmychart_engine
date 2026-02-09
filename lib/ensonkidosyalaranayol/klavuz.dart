@@ -26,15 +26,44 @@ var sonSurum = {
           "createdAt": "2026-01-11T10:00:00Z",
           "updatedAt": "2026-01-11T10:00:00Z",
         },
-        "legend": [{}, {}, {}],
+        "legend": [
+          {
+            "label": "@inputs.symbol.value",
+            "color": "@styles.neutralGray.color",
+          },
+          {
+            "label": "@inputs.interval.value",
+            "color": "@styles.neutralGray.color",
+          },
+          {
+            "label": "@fields.close.value[-1]",
+            "style":
+                "@rules.trendRule(@styles.bullGreen, @styles.bearRed, @styles.neutralGray)",
+          },
+          {},
+          {},
+        ],
         "inputs": [{}, {}, {}],
         "fields": [{}, {}, {}],
         "data": [[], [], []],
         "plots": [{}, {}, {}],
         "guides": [{}, {}, {}],
         "notations": [{}, {}, {}],
-        "rules": [{}, {}, {}],
-        "styles": [{}, {}, {}],
+        "rules": [
+          {
+            "id": "trendRule",
+            "positive": "@fields.clos.value > @fields.open.value",
+            "negative": "@fields.clos.value <= @fields.open.value",
+            "neutral": "@fields.clos.value == @fields.open.value",
+          },
+          {},
+          {},
+        ],
+        "styles": [
+          {"id": "bullGreen", "color": "#00FF00"},
+          {"id": "bearRed", "color": "#FF0000"},
+          {"id": "neutralGray", "color": "#888888"},
+        ],
       },
       {},
       {},
@@ -64,8 +93,7 @@ var sonSurum = {
     { "id": "neutralGray", "color": "#888888" }
   ],
 
-  "legend": [
-    { "text": "Parite" style: "" },
+  "legend": [ 
     { "text": "@inputs.symbol.value", style: "" },
     { "text": "@inputs.interval.value", color: "@styles.neutralGray.color" },
   {
@@ -167,8 +195,8 @@ var sonSurum = {
    `@` varsa → resolver çalıştır
    `@rules`ile başlıyor ise →"@rules.trendRule(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)" yapısı çalışır
 
-5. kural da eee condition yani rules yani kurallar kuralların yapısı tek bir şekildedir ya içerisinde referans data alır veyahutta bir değer alır bu değerde w türdedir dolayısıyla condition şartları karşılaştırmaları w türünde değerleri karşılaştırır.
+5.   rules yani   kuralların yapısı tek bir şekildedir ya içerisinde referans data alır veyahutta bir değer alır bu değerde double  türdedir dolayısıyla rules şartları karşılaştırmaları double türünde değerleri karşılaştırır.
 
-6. Diğer kural herhangi bir veri yapısına yani herhangi bir data verisine erişmek için field. IS. Özel nokta value şeklinde erişilir vali onun sonuna köşeli parantez ile sıfırdan- bir eksi sonsuza kadar bir değer verilebilir bu da önceki periyodları serinin önceki periyotlarında karşılık gelir kısacası data için felt aids yine fill this lerden ids dataya erişilebilir direkt at data diye kullanımı yoktur
+6. Diğer kural herhangi bir veri yapısına yani herhangi bir data verisine erişmek için field. IS. Özel nokta value şeklinde erişilir vali onun sonuna köşeli parantez ile sıfırdan [-1] gibi    bir değer verilebilir bu da  periyodları serinin o kadar ileride veya geride(-) periyotlarında karşılık gelir kısacası data içinde  bir veriye  felds.id.value[0]  ile erişilebilir direkt at data diye kullanımı yoktur
 7.
 */
