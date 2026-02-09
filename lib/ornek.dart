@@ -424,7 +424,6 @@ const String candlestickExample = '''{
       "direction": "up"
     }
   ],
-
   "guides": [
     {
       "guideType": "line",

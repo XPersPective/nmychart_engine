@@ -1,57 +1,59 @@
-/*
-const String candlestickExample = '''{
+var sonSurum = {
   "metadata": {
-    "id": "btc_ohlc_1h",
-    "name": "Bitcoin OHLC",
-    "shortName": "BTC",
-    "description": "Bitcoin 1-hour candlestick",
-    "version": "1.0.0",
+    "id": "unique_chart_id_123",
     "createdAt": "2026-01-11T10:00:00Z",
     "updatedAt": "2026-01-11T10:00:00Z",
-    "type": "financial",
-    "subType": "price"
+    "symbol": "BTC/USDT",
+    "interval": "1h",
+    "plotType": "line",
+    "layoutType": "financial",
   },
-
- 
-
-"menuBar": {
-    "id": "mainMenuBar",
-    "position": "top",  // Menü çubuğunun yerleşim yeri: üstte, sağda, solda vb.
-    "menus": [
+  "charts": [
+    [
       {
-        "id": "chartShapeMenu",
-        "type": "chartShape",
-        "targetPilotId": "pilot_123",
-        "options": ["candlestick", "line", "area", "bar"],
-        "selectedType": "line"
+        "metadata": {
+          "id": "ohlc_001",
+          "name": "Open-High-Low-Close",
+          "shortName": "OHLC",
+          "description": "Financial price chart",
+          "type": "financial",
+          "category": "price",
+          "renderMode": "separate",
+          "provider": "system",
+          "visibility": "public",
+          "author": "anonymous",
+          "version": "1.0.0",
+          "createdAt": "2026-01-11T10:00:00Z",
+          "updatedAt": "2026-01-11T10:00:00Z",
+        },
+        "legend": [{}, {}, {}],
+        "inputs": [{}, {}, {}],
+        "fields": [{}, {}, {}],
+        "data": [[], [], []],
+        "plots": [{}, {}, {}],
+        "guides": [{}, {}, {}],
+        "notations": [{}, {}, {}],
+        "rules": [{}, {}, {}],
+        "styles": [{}, {}, {}],
       },
-      {
-        "id": "symbolMenu",
-        "type": "symbol",
-        "targetInputId": "symbolInput",
-        "options": ["BTC/USDT", "ETH/USDT", "XRP/USDT"]  // Örnek semboller
-      },
-      {
-        "id": "intervalMenu",
-        "type": "interval",
-        "targetInputId": "intervalInput",
-        "options": ["1h", "1d", "1w"]  // Örnek zaman aralıkları
-      },
-      {
-        "id": "indicatorMenu",
-        "type": "indicator",
-        "options": ["MACD", "RSI", "Bollinger Bands"]  // Örnek indikatörler
-      }
-    ]
-  }
+      {},
+      {},
+    ],
+    [{}, {}, {}],
+    [{}, {}, {}],
+    [{}, {}, {}],
+  ],
+};
 
+/*
+  
   "rules": [
     {
       "id": "trendRule",
       "logic": {
         "positive": "@fields.close.value > @fields.open.value",
         "negative": "@fields.close.value <= @fields.open.value",
-        "neutral": "close == open"
+        "neutral": "@fields.close.value == "@fields.open.value",
       }
     }
   ],
@@ -65,7 +67,7 @@ const String candlestickExample = '''{
   "legend": [
     { "text": "Parite" style: "" },
     { "text": "@inputs.symbol.value", style: "" },
-    { "text": "@inputs.interval.value", style: "@styles.neutralGray" },
+    { "text": "@inputs.interval.value", color: "@styles.neutralGray.color" },
   {
     "text": "@fields.close.value[-1]",
     "style": "@rules.trendRule(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)"
@@ -112,11 +114,11 @@ const String candlestickExample = '''{
     { 
     "originForm": "ohlc",          // Veri formu
       "plotType": "candlestick",
-      "fieldKeyX": "date",
-      "fieldKeyOpen": "open",
-      "fieldKeyHigh": "high",
-      "fieldKeyLow": "low",
-      "fieldKeyClose": "close",
+      "date": "@field.date.value",
+      "open": "@field.date.open",
+      "high": "@field.date.high", 
+      "low": "@field.date.low", 
+      "close": "@field.date.close", 
       "style":"@rules.trendRule(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)"  
     }
   ],

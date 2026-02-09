@@ -31,7 +31,6 @@ const String barChartExample = '''{
       "key": "month",
       "valueType": "string",
       "axis": "x",
-      "showInLegendType": "hidden"
     },
     {
       "name": "Sales",
