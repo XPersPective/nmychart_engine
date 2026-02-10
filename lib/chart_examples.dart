@@ -845,32 +845,17 @@ const String candlestickFinancialExample = '''{
   ],
 
   "notations": [
-    {
-      "shape": "triangle",
-      "label": "Buy Signal",
-      "dataIndices": [2],
-      "color": "#52C41A",
-      "direction": "up"
-    },
-    {
-      "shape": "triangle",
-      "label": "Resistance",
-      "dataIndices": [5],
-      "color": "#FF4D4F",
-      "direction": "down"
-    }
+     
+          {
+            "id": "guide_id",
+            "title": "Support",
+            "style": "@rules.candlestick(@styles.bullGreen ,@styles.bearRed, @styles.neutralGray )" 
+          },
+
+   
   ],
 
-  "guides": [
-    {
-      "guideType": "line",
-      "axis": "y",
-      "value": 2500.0,
-      "label": "Support",
-      "color": "#52C41A",
-      "strokeStyle": "dashed"
-    },
-
+  
      "guides": [
           {
             "id": "guide_id",

@@ -303,6 +303,7 @@ Son güncelleme zamanı(milliseconds cinsinden sistem saati).
 Tamam, medya dosyasına yapıştırılacak şekilde, font/format değiştirmeden ve senin verdiğin yapıya uyacak şekilde **Rules (Kurallar)** bölümünü ekleyelim. Kod blokları ve metinler MD uyumlu, sade fontlu olacak.
 
 **Not:** İnputlar ve fieldler referans değerler alamaz. Tüm değerleri literal (sabit) olmalıdır.
+Sadece **notations** lar style "id" leri alır.
 
 ## Rules (Kurallar)
 
@@ -368,7 +369,9 @@ Bu çağrı, `trendRule` kuralının sonucunu doğrudan verir. Durum pozitifse `
 "styles": [
   { "id": "bullGreen", "color": "#00FF00" },
   { "id": "bearRed", "color": "#FF0000" },
-  { "id": "neutralGray", "color": "#888888" }
+  { "id": "neutralGray", "color": "#888888" }, 
+  { "id": "signalEntry",  "text": "Signal Entry", "color": "#00C853", "icon": "arrow_up"
+    }
 ]
 ```
 
@@ -770,7 +773,7 @@ Field’lar üzerinden data içindeki değerler alınır.
 * **id**: Guide kimliği
 * **type**: Guide tipi (`line` | `band`)
 * **axis**: Bağlandığı eksen (`x` | `y`)
-* **valueType**: Guide değer tipi
+* **valueType**: Guide değer tipi(field tipi)
 * **value**: Guide için değer
 * **upperValue / lowerValue**: Band guide için üst ve alt değerler
 * **upperTitle / lowerTitle**: Band etiketleri
@@ -782,10 +785,75 @@ Field’lar üzerinden data içindeki değerler alınır.
 
 Desteklenen tipler:
 `integer`, `double`, `string`, `boolean`, `date`
- 
-## Renk ve Stil
 
-* **color**: Line rengi
-* **upperColor / lowerColor / fillColor**: Band renkleri
-* **strokeStyle**: Çizgi stili (`solid`, `dashed`)
+## Notation
+
+```json
+{
+  "notations": [
+    {
+      "id": "notation_id",
+      "axis": "y",
+      "valueType": "double",
+      "title": "Signal Entry",
+      "value": 30.0,
+      "style": "@rules.candlestick(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)"
+    }
+  ]
+}
+```
+
+**Notation**, şart değerlendirmesini `style` içindeki rule’lara bırakarak, koşul sonucuna göre (ör. sinyal girişi, çıkışı veya olay) uygun **stil ailesi** ile grafikte **ikon/işaret** üreten anlamsal temsildir.
+
+---
+
+### Alan Açıklamaları
+
+* **id**: Notation kimliği
+* **axis**: Notation’ın bağlandığı eksen (`x` | `y`)
+* **valueType**: Notation’da kullanılan değerin tipi; bağlı olduğu eksenin **final value type’ı ile birebir aynı olmak zorundadır**, aksi durumda hata oluşur
+* **value**: Notation’ın eksen üzerinde işaretleneceği referans değer
+* **title**: Notation ile birlikte gösterilecek anlamsal etiket (örn. Support, Signal Entry)
+* **style**: Şart değerlendirmesini yapan ve görsel çıktıyı üreten **style / rule referansı**
  
+### Style Üzerinden Görsel Üretim
+
+Notation görsel üretmez.
+Görsel çıktı **tamamen style** tarafından belirlenir.
+
+Style aşağıdaki öğeleri kapsar:
+
+* renk
+* ikon (shape)
+* metin
+* stroke / fill davranışı 
+
+### Desteklenen Shape (Style İçinde)
+
+Style alanında kullanılabilen ikon/işaret tipleri:
+
+* `triangle`
+* `circle`
+* `diamond`
+* `square`
+* `star`
+* `arrow`
+* `cross`
+* `hexagon`
+
+Bu shape’ler:
+
+* sinyal girişi / çıkışı
+* kırılım
+* uyarı
+* olay işaretleri
+
+gibi anlamsal durumların görselleştirilmesinde kullanılır.
+ 
+### Net Kurallar (Final)
+
+* Şart **notation’da tanımlanmaz**, **style / rule içinde değerlendirilir**
+* Notation yalnızca **hangi stil ailesinin kullanılacağını** belirtir
+* Renk, ikon (shape), metin ve yön **style tarafından üretilir**
+* `valueType`, eksen ve field tipleriyle **tam uyumlu olmak zorundadır**
+* Notation **plot veya guide değildir**, veri çizmez, **anlam işaretler**

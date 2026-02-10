@@ -206,7 +206,17 @@ var sonSurum = {
             "strokeStyle": "dashed",
           },
         ],
-        "notations": [{}, {}, {}],
+        "notations": [
+          {
+            "id": "notation_id",
+            "axis": "y",
+            "valueType": "double",
+            "title": "Signal Entry",
+            "value": 30.0,
+            "style":
+                "@rules.candlestick(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)",
+          },
+        ],
         "rules": [
           {
             "id": "trendRule",
@@ -214,8 +224,6 @@ var sonSurum = {
             "negative": "@fields.clos.value <= @fields.open.value",
             "neutral": "@fields.clos.value == @fields.open.value",
           },
-          {},
-          {},
         ],
         "styles": [
           {"id": "bullGreen", "color": "#00FF00"},

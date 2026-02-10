@@ -22,6 +22,7 @@ extension DirectionExt on Direction {
     }
   }
 
+ 
   static Direction fromString(String value) {
     switch (value.toLowerCase()) {
       case 'up':
