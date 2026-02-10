@@ -1,12 +1,17 @@
 var sonSurum = {
   "metadata": {
     "id": "unique_chart_id_123",
-    "createdAt": "2026-01-11T10:00:00Z",
-    "updatedAt": "2026-01-11T10:00:00Z",
+    "createdAt": 1676985600000,
+    "updatedAt": 1676998900000,
     "symbol": "BTC/USDT",
     "interval": "1h",
     "plotType": "line",
     "layoutType": "financial",
+    "axisConfig": {
+      "baseAxis": "x",
+      "baseAxisType": "date",
+      "valueAxisType": "double",
+    },
   },
   "charts": [
     [
@@ -21,33 +26,186 @@ var sonSurum = {
           "renderMode": "separate",
           "provider": "system",
           "visibility": "public",
+          "axisConfig": {
+            "baseAxis": "x",
+            "baseAxisType": "date",
+            "valueAxisType": "double",
+          },
           "author": "anonymous",
           "version": "1.0.0",
-          "createdAt": "2026-01-11T10:00:00Z",
-          "updatedAt": "2026-01-11T10:00:00Z",
+          "createdAt": 1676985600000,
+          "updatedAt": 1676998700000,
         },
         "legend": [
           {
-            "label": "@inputs.symbol.value",
+            "text": "@inputs.symbol.value",
             "color": "@styles.neutralGray.color",
           },
+          {"text": "@inputs.interval.value", "color": "#3FA7D6"},
           {
-            "label": "@inputs.interval.value",
-            "color": "@styles.neutralGray.color",
+            "text": "@fields.close.value",
+            "color":
+                "@rules.trendRule(@styles.bullGreen.color, @styles.bearRed.color, @styles.neutralGray.color)",
           },
-          {
-            "label": "@fields.close.value[-1]",
-            "style":
-                "@rules.trendRule(@styles.bullGreen, @styles.bearRed, @styles.neutralGray)",
-          },
-          {},
-          {},
         ],
-        "inputs": [{}, {}, {}],
-        "fields": [{}, {}, {}],
+        "inputs": [
+          {
+            "id": "textExample",
+            "name": "Text Example",
+            "type": "string",
+            "value": "Sample Text",
+          },
+          {
+            "id": "symbol",
+            "name": "Symbol",
+            "type": "symbol",
+            "value": "BTC/USDT",
+            "base": "BTC",
+            "quote": "USDT",
+          },
+          {
+            "id": "interval",
+            "name": "Interval",
+            "type": "interval",
+            "value": "4h",
+          },
+          {
+            "id": "period",
+            "name": "Period",
+            "type": "integer",
+            "value": 14,
+            "min": null,
+            "max": null,
+          },
+          {
+            "id": "smoothing",
+            "name": "Smoothing",
+            "type": "double",
+            "value": 0.5,
+            "min": 0.0,
+            "max": 1.0,
+          },
+          {
+            "id": "showLine",
+            "name": "Show Line",
+            "type": "boolean",
+            "value": true,
+          },
+          {
+            "id": "time",
+            "name": "Start time",
+            "type": "date",
+            "value": 1676985600000,
+          },
+        ],
+        "fields": [
+          {"id": "date", "name": "Close Time", "type": "date", "axis": "x"},
+          {"id": "close", "name": "Close", "type": "integer", "axis": "y"},
+          {"id": "close", "name": "Close", "type": "double", "axis": "y"},
+          {"id": "signal", "name": "Signal", "type": "string", "axis": "y"},
+          {"id": "istrend", "name": "IsTrend", "type": "boolean", "axis": "y"},
+        ],
         "data": [[], [], []],
-        "plots": [{}, {}, {}],
-        "guides": [{}, {}, {}],
+        "plots": [
+          {
+            "id": "plot_id0",
+            "type": "line",
+            "dataForm": "scalar",
+            "axisConfig": {
+              "baseAxis": "x",
+              "baseAxisType": "date",
+              "valueAxisType": "double",
+            },
+            "x": "@fields.date.value",
+            "y": "@fields.ma.value",
+            "color": "#1890FF",
+          },
+          {
+            "id": "plot_id1",
+            "type": "area",
+            "dataForm": "signedScalar",
+            "axisConfig": {
+              "baseAxis": "x",
+              "baseAxisType": "date",
+              "valueAxisType": "double",
+            },
+            "x": "@fields.date.value",
+            "y": "@fields.ma.value",
+            "color": "#1890FF",
+          },
+          {
+            "id": "plot_id2",
+            "type": "candlestick",
+            "dataForm": "ohlc",
+            "axisConfig": {
+              "baseAxis": "x",
+              "baseAxisType": "date",
+              "valueAxisType": "double",
+            },
+            "x": "@fields.date.value",
+            "open": "@fields.open.value",
+            "high": "@fields.high.value",
+            "low": "@fields.low.value",
+            "close": "@fields.close.value",
+            "color":
+                "@rules.candlestick(@styles.bullGreen.color,@styles.bearRed.color,@styles.neutralGray.color)",
+          },
+          {
+            "id": "plot_id3",
+            "type": "bar",
+            "dataForm": "scalar",
+            "axisConfig": {
+              "baseAxis": "x",
+              "baseAxisType": "date",
+              "valueAxisType": "double",
+            },
+            "x": "@fields.date.value",
+            "y": "@fields.month.value",
+            "color": "#1890FF",
+          },
+          {
+            "id": "plot_id_band",
+            "type": "band",
+            "dataForm": "band",
+            "axisConfig": {
+              "baseAxis": "x",
+              "baseAxisType": "date",
+              "valueAxisType": "double",
+            },
+            "x": "@fields.date.value",
+            "upper": "@fields.bb_upper.value",
+            "lower": "@fields.bb_lower.value",
+            "upperColor": "@styles.upper.color",
+            "lowerColor": "@styles.lower.color",
+            "fillColor": "@styles.fill.color",
+          },
+        ],
+        "guides": [
+          {
+            "id": "guide_id_line",
+            "type": "line",
+            "axis": "y",
+            "valueType": "double",
+            "title": "Support",
+            "value": 30.0,
+            "color": "#52C41A",
+            "strokeStyle": "dashed",
+          },
+          {
+            "id": "guide_id_band",
+            "type": "band",
+            "axis": "y",
+            "valueType": "double",
+            "upperValue": 80.0,
+            "lowerValue": 30.0,
+            "upperTitle": "Resistance",
+            "lowerTitle": "Support",
+            "upperColor": "@styles.upper.color",
+            "lowerColor": "@styles.lower.color",
+            "fillColor": "@styles.fill.color",
+            "strokeStyle": "dashed",
+          },
+        ],
         "notations": [{}, {}, {}],
         "rules": [
           {
@@ -75,24 +233,8 @@ var sonSurum = {
 };
 
 /*
-  
-  "rules": [
-    {
-      "id": "trendRule",
-      "logic": {
-        "positive": "@fields.close.value > @fields.open.value",
-        "negative": "@fields.close.value <= @fields.open.value",
-        "neutral": "@fields.close.value == "@fields.open.value",
-      }
-    }
-  ],
-
-  "styles": [
-    { "id": "bullGreen", "color": "#00FF00" },
-    { "id": "bearRed", "color": "#FF0000" },
-    { "id": "neutralGray", "color": "#888888" }
-  ],
-
+ 
+ 
   "legend": [ 
     { "text": "@inputs.symbol.value", style: "" },
     { "text": "@inputs.interval.value", color: "@styles.neutralGray.color" },

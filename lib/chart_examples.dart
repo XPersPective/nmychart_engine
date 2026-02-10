@@ -870,6 +870,30 @@ const String candlestickFinancialExample = '''{
       "color": "#52C41A",
       "strokeStyle": "dashed"
     },
+
+     "guides": [
+          {
+            "id": "guide_id",
+            "type": "line",
+            "axis": "y",
+            title:"Support",
+            valueType": "double",
+            "value": 30.0,
+            "color": "#52C41A",
+            "strokeStyle": "dashed" 
+          },  
+          {
+            "id": "guide_id",
+            "type": "band",
+            "axis": "y",
+            upper:"Rezistance",
+            lower:"Support",
+            valueType": "double", 
+            "upperColor": "@styles.upper.color",
+            "lowerColor": "@styles.lower.color",
+            "fillColor": "@styles.fill.color",
+          },
+        ],
     {
       "guideType": "line",
       "axis": "y",
@@ -1064,33 +1088,31 @@ const String bollingerBandsExample = '''{
 
   "fields": [
     {
+      "id": "date",
       "name": "Date",
-      "key": "date",
-      "valueType": "timestamp",
-      "axis": "x",
-      "showInLegendType": "hidden",
-      "format": "YYYY-MM-DD HH:00"
+      "type": "timestamp",
+      "axis": "x",  
     },
     {
       "name": "Upper Band",
       "key": "upperBand",
       "valueType": "double",
       "axis": "y",
-      "showInLegendType": "nameAndValue"
+    
     },
     {
       "name": "Middle Band",
       "key": "middleBand",
       "valueType": "double",
       "axis": "y",
-      "showInLegendType": "nameAndValue"
+ 
     },
     {
       "name": "Lower Band",
       "key": "lowerBand",
       "valueType": "double",
       "axis": "y",
-      "showInLegendType": "nameAndValue"
+   
     }
   ],
 

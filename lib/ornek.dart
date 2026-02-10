@@ -345,7 +345,75 @@ const String candlestickExample = '''{
       "base": "BTC",
       "quote": "USDT",
       "showInLegendType": "nameAndValue"
-    },
+    },"inputs": [
+  {
+    "id": "textExample",
+    "name": "Text Example",
+    "type": "string",
+    "value": "Sample Text"
+  },
+  {
+    "id": "symbol",
+    "name": "Symbol",
+    "type": "symbol",
+    "value": "BTC/USDT",
+    "base": "BTC",
+    "quote": "USDT"
+  },
+  {
+    "id": "interval",
+    "name": "Interval",
+    "type": "interval",
+    "value": "4h"
+  },
+  {
+    "id": "period",
+    "name": "Period",
+    "type": "integer",
+    "value": 14,
+    "min": 2,
+    "max": 100
+  },
+  {
+    "id": "smoothing",
+    "name": "Smoothing",
+    "type": "double",
+    "value": 0.5,
+    "min": 0.0,
+    "max": 1.0
+  },
+  {
+    "id": "showLine",
+    "name": "Show Line",
+    "type": "boolean",
+    "value": true
+  },
+  {
+    "id": "startDate",
+    "name": "Start Date",
+    "type": "date",
+    "value": "2026-02-10",
+    "format": "YYYY-MM-DD",
+    "unit": "iso"
+  },
+  {
+    "id": "endDateMillis",
+    "name": "End Date Milliseconds",
+    "type": "date",
+    "value": 1676985600000,
+    "format": "milliseconds",
+    "unit": "ms"
+  },
+  {
+    "id": "endDateSeconds",
+    "name": "End Date Seconds",
+    "type": "date",
+    "value": 1676985600,
+    "format": "seconds",
+    "unit": "s"
+  }
+]
+
     {
       "name": "Interval",
       "key": "interval",
@@ -370,7 +438,7 @@ const String candlestickExample = '''{
   "negative": "bearRed",
   "neutral": "standardBlue"
 }
-    }
+    },
   ],
 
   "fields": [
