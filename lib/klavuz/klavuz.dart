@@ -147,8 +147,7 @@ var sonSurum = {
             "high": "@fields.high.value",
             "low": "@fields.low.value",
             "close": "@fields.close.value",
-            "color":
-                "@rules.candlestick(@styles.bullGreen.color,@styles.bearRed.color,@styles.neutralGray.color)",
+            "color":"@rules.candlestick(@styles.bullGreen.color,@styles.bearRed.color,@styles.neutralGray.color)",
           },
           {
             "id": "plot_id3",
@@ -243,14 +242,7 @@ var sonSurum = {
 /*
  
  
-  "legend": [ 
-    { "text": "@inputs.symbol.value", style: "" },
-    { "text": "@inputs.interval.value", color: "@styles.neutralGray.color" },
-  {
-    "text": "@fields.close.value[-1]",
-    "style": "@rules.trendRule(@styles.bullGreen,@styles.bearRed,@styles.neutralGray)"
-  }
-  ],
+  
 
   *******
   bu serverde donusum iin saklanır ve froenddte menu donusumleri için saklanır orgindataform capalityes tir
